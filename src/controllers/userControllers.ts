@@ -1,5 +1,5 @@
 import UsersModel from '../models/usersModel'
-import { HttpMethod, UrlUsers, HttpCode } from '../interface/interface'
+import { HttpMethod, UrlUsers, HttpCode, ErrorUser } from '../interface/interface'
 import * as http from 'http';
 
 class UserControllers {
@@ -19,7 +19,14 @@ class UserControllers {
                 case HttpMethod.POST:
                     this.methodPost(request, response)
                     break
+                case HttpMethod.PUT:
+                    this.methodPut(request, response)
+                    break
+                case HttpMethod.DELETE:
+                    this.methodDelete(request, response)
+                    break
                 default:
+                    this.defaultMethod(request, response)
                     break
             }
         }
@@ -44,7 +51,25 @@ class UserControllers {
             body += chunk.toString();
         })
         request.on('end', async () => {
+            const id = request.url?.split('/')[3] || '';
+            if (id !== '') {
+                response.writeHead(HttpCode.BAD_REQUEST, { 'Content-Type': 'application/json' })
+                response.end(JSON.stringify({ error: ErrorUser.INCORRECT_ID }))
+            }
             const result = await this.command.createUser(JSON.parse(body));
+            response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
+            response.end(JSON.stringify(result.body))
+        });
+    }
+
+    private async methodPut(request: http.IncomingMessage, response: http.ServerResponse<http.IncomingMessage>) {
+        let body = '';
+        request.on('data', (chunk) => {
+            body += chunk.toString();
+        })
+        request.on('end', async () => {
+            const userId = request.url?.split('/')[3] || ''
+            const result = await this.command.updateUser(userId, JSON.parse(body));
             response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
             response.end(JSON.stringify(result.body))
         });
@@ -52,6 +77,18 @@ class UserControllers {
             response.writeHead(HttpCode.BAD_REQUEST, { 'Content-Type': 'application/json' })
             response.end(JSON.stringify({ error: error.message }))
         })
+    }
+
+    private async methodDelete(request: http.IncomingMessage, response: http.ServerResponse<http.IncomingMessage>) {
+        const userId = request.url?.split('/')[3] || ''
+        const result = await this.command.deleteUser(userId);
+        response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
+        response.end(JSON.stringify(result.body))
+    }
+
+    private defaultMethod(request: http.IncomingMessage, response: http.ServerResponse<http.IncomingMessage>) {
+        response.writeHead(HttpCode.BAD_REQUEST, { 'Content-Type': 'application/json' })
+        response.end(JSON.stringify({ error: ErrorUser.INCORRECT_METHOD }))
     }
 }
 

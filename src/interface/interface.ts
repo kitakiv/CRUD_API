@@ -32,6 +32,7 @@ export enum ErrorUser {
     INCORRECT_ID = "incorrect user id",
     INCORRECT_TYPE = "incorrect user type or missing fields",
     INCORRECT_ROUTE = "incorrect route use /api/users or /api/users/:id",
+    INCORRECT_METHOD = "incorrect method use GET, POST, PUT or DELETE",
 }
 
 export interface UserObject {
