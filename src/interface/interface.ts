@@ -20,10 +20,18 @@ export enum HttpCode {
     INTERNAL_SERVER_ERROR = 500,
 }
 
+export enum UrlUsers {
+    ALL = "/api/users",
+    ALL_ID = "/api/users/",
+}
+
 export enum ErrorUser {
-    USER_NOT_FOUND = "USER_NOT_FOUND",
+    USER_NOT_FOUND = "User not found",
     USER_NOT_SAVED = "USER_NOT_SAVED",
     USER_NOT_UPDATED = "USER_NOT_UPDATED",
+    INCORRECT_ID = "incorrect user id",
+    INCORRECT_TYPE = "incorrect user type or missing fields",
+    INCORRECT_ROUTE = "incorrect route use /api/users or /api/users/:id",
 }
 
 export interface UserObject {

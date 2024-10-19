@@ -31,7 +31,7 @@ class UsersModel {
         } else {
             return Promise.resolve({
                 statusCode: HttpCode.BAD_REQUEST,
-                body: { error: ErrorUser.USER_NOT_FOUND },
+                body: { error: ErrorUser.INCORRECT_ID },
             })
         }
     }
@@ -69,7 +69,7 @@ class UsersModel {
         } else {
             return Promise.resolve({
                 statusCode: HttpCode.BAD_REQUEST,
-                body: { error: ErrorUser.USER_NOT_SAVED },
+                body: { error: ErrorUser.INCORRECT_TYPE },
             })
         }
     }
@@ -97,13 +97,13 @@ class UsersModel {
             } else {
                 return Promise.resolve({
                     statusCode: HttpCode.BAD_REQUEST,
-                    body: { error: ErrorUser.USER_NOT_UPDATED },
+                    body: { error: ErrorUser.INCORRECT_TYPE },
                 })
             }
         }
         return Promise.resolve({
             statusCode: HttpCode.BAD_REQUEST,
-            body: { error: ErrorUser.USER_NOT_UPDATED },
+            body: { error: ErrorUser.INCORRECT_ID },
         })
     }
 
@@ -125,7 +125,7 @@ class UsersModel {
         } else {
             return Promise.resolve({
                 statusCode: HttpCode.BAD_REQUEST,
-                body: { error: ErrorUser.USER_NOT_FOUND },
+                body: { error: ErrorUser.INCORRECT_ID },
             })
         }
     }

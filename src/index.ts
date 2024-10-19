@@ -1,6 +1,7 @@
 import http from 'http'
 import dotenv from 'dotenv';
-import userControllers from './controllers/userControllers'
+import userControllers from './controllers/userControllers';
+import { ErrorUser, HttpCode } from './interface/interface';
 
 dotenv.config()
 
@@ -16,8 +17,8 @@ const server = http.createServer((req, res) => {
   else if (url?.startsWith('/api/users')) {
     userControllers.switchMethodUrl(req, res);
   } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' })
-    res.end('404 Not Found')
+    res.writeHead(HttpCode.NOT_FOUND, { 'Content-Type': 'text/plain' })
+    res.end({error: ErrorUser.INCORRECT_ROUTE})
   }
 })
 
