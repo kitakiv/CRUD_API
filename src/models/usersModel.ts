@@ -2,7 +2,7 @@ import usersJson from '../data/users.json'
 import {
     UserObject,
     HttpCode,
-    Response,
+    ResponseUser,
     ErrorUser,
 } from '../interface/interface'
 import { validate as isUUID, v4 as uuid } from 'uuid'
@@ -13,11 +13,11 @@ class UsersModel {
     constructor() {
         this.users = (usersJson as UserObject[]) || []
     }
-    public getAllUsers(): Promise<Response> {
+    public getAllUsers(): Promise<ResponseUser> {
         return Promise.resolve({ statusCode: HttpCode.OK, body: this.users })
     }
 
-    public getUserById(userId: string): Promise<Response> {
+    public getUserById(userId: string): Promise<ResponseUser> {
         if (isUUID(userId)) {
             const user = this.users.find((user) => user.id === userId)
             if (user) {
@@ -57,7 +57,7 @@ class UsersModel {
         return false
     }
 
-    public createUser(user: unknown): Promise<Response> {
+    public createUser(user: unknown): Promise<ResponseUser> {
         if (this.checkUserType(user)) {
             const userCreated = user as UserObject
             const newUser: UserObject = {
@@ -74,7 +74,7 @@ class UsersModel {
         }
     }
 
-    public updateUser(userId: string, user: unknown): Promise<Response> {
+    public updateUser(userId: string, user: unknown): Promise<ResponseUser> {
         if (isUUID(userId)) {
             if (this.checkUserType(user)) {
                 const userUpdated = user as UserObject
@@ -107,7 +107,7 @@ class UsersModel {
         })
     }
 
-    public deleteUser(userId: string): Promise<Response> {
+    public deleteUser(userId: string): Promise<ResponseUser> {
         if (isUUID(userId)) {
             const index = this.users.findIndex((user) => user.id === userId)
             if (index !== -1) {

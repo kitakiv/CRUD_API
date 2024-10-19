@@ -5,7 +5,7 @@ export enum HttpMethod {
     DELETE = "DELETE",
 }
 
-export interface Response {
+export interface ResponseUser {
     statusCode: HttpCode;
     body?: unknown;
 }
