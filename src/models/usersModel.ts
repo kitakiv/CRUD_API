@@ -85,7 +85,7 @@ class UsersModel {
                         ...userUpdated,
                     }
                     return Promise.resolve({
-                        statusCode: HttpCode.CREATED,
+                        statusCode: HttpCode.OK,
                         body: this.users[index],
                     })
                 } else {

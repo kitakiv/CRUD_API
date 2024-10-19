@@ -33,12 +33,13 @@ class UserControllers {
     }
 
     private async methodGet(request: http.IncomingMessage, response: http.ServerResponse<http.IncomingMessage>) {
-        const url = request.url || ''
-        if (url === UrlUsers.ALL || url === UrlUsers.ALL_ID) {
+        const url = request.url || '';
+        const id = url.split('/')[3] || '';
+        if ((url === UrlUsers.ALL || url === UrlUsers.ALL_ID) && id === '') {
             const result = await this.command.getAllUsers();
             response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
             response.end(JSON.stringify(result.body))
-        } else if (url.startsWith(UrlUsers.ALL_ID)) {
+        } else if (url.startsWith(UrlUsers.ALL_ID) && id !== '') {
             const result = await this.command.getUserById(url.split('/')[3]);
             response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
             response.end(JSON.stringify(result.body))
@@ -55,10 +56,11 @@ class UserControllers {
             if (id !== '') {
                 response.writeHead(HttpCode.BAD_REQUEST, { 'Content-Type': 'application/json' })
                 response.end(JSON.stringify({ error: ErrorUser.INCORRECT_ID }))
+            } else {
+                const result = await this.command.createUser(JSON.parse(body));
+                response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
+                response.end(JSON.stringify(result.body))
             }
-            const result = await this.command.createUser(JSON.parse(body));
-            response.writeHead(result.statusCode, { 'Content-Type': 'application/json' })
-            response.end(JSON.stringify(result.body))
         });
     }
 

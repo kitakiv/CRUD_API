@@ -10,20 +10,20 @@ const PORT = process.env.PORT || 3000
 const server = http.createServer((req, res) => {
   try {
     const { url } = req
-
-    if (url === '/') {
+    const urlPath = url || ''
+    if (urlPath === '/') {
       res.writeHead(200, { 'Content-Type': 'text/plain' })
       res.end('Hello, World!')
-    }
-    else if (url?.startsWith('/api/users')) {
+    } else if (urlPath.startsWith('/api/users')) {
       userControllers.switchMethodUrl(req, res);
-    } else {
-      res.writeHead(HttpCode.NOT_FOUND, { 'Content-Type': 'text/plain' })
-      res.end({ error: ErrorUser.INCORRECT_ROUTE })
+    } else if (urlPath !== '/' && !urlPath.startsWith('/api/users')) {
+      res.writeHead(HttpCode.NOT_FOUND, { 'Content-Type': 'application/json' })
+      res.end(JSON.stringify({ error: ErrorUser.INCORRECT_ROUTE }))
     }
   } catch (error) {
     res.writeHead(HttpCode.INTERNAL_SERVER_ERROR, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({ error: (error as Error).message }))
+    console.log(error)
   }
 })
 
