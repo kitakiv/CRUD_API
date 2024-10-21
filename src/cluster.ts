@@ -15,13 +15,17 @@ if (cluster.isPrimary) {
   console.log(`Primary ${process.pid} is running`);
 
   for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
+    const worker = parseInt(PORT as string) + i
+    cluster.fork({
+      worker_port: worker,
+    });
   }
 
   cluster.on('exit', (worker, code, signal) => {
     console.log(`worker ${worker.process.pid} died`);
   });
 } else {
+    const port = process.env.worker_port || 3000
     const server = http.createServer((req, res) => {
         try {
           const { url } = req
@@ -41,7 +45,7 @@ if (cluster.isPrimary) {
           console.log(error)
         }
       })
-      server.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`)
+      server.listen(port, () => {
+        console.log(`Server is running on port ${port}`)
       })
 }
