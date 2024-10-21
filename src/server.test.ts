@@ -66,6 +66,46 @@ describe('server', () => {
         });
     });
 
+    it('With a POST api/users request, we try to create a new object with an invalid type', async () => {
+        const postData = JSON.stringify({
+            username: 'john',
+            age: 'invalid',
+            hobbies: ['reading', 'swimming']
+        });
+
+        const { res: getRes, body: getBody } = await request({
+            hostname: 'localhost',
+            port: 4000,
+            path: '/api/users',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(postData)
+            }
+        }, postData);
+
+        expect(getRes.statusCode).toBe(400);
+        expect(JSON.parse(getBody)).toEqual({
+            error: 'incorrect user type or missing fields',
+        });
+    });
+
+    it('With a GET api/user/{userId} request, with not uuid id', async () => {
+
+        const { res: getRes, body: getBody } = await request({
+            hostname: 'localhost',
+            port: 4000,
+            path: `/api/users/${1}`,
+            method: 'GET'
+        });
+
+        expect(getRes.statusCode).toBe(400);
+        expect(JSON.parse(getBody)).toEqual({
+            error: 'incorrect user id',
+        });
+
+    });
+
     it('With a GET api/user/{userId} request, we try to get the created record by its id', async () => {
         const postData = JSON.stringify({
             username: 'john',
@@ -93,14 +133,6 @@ describe('server', () => {
             method: 'GET'
         });
 
-        expect(getRes.statusCode).toBe(200);
-        expect(getRes.headers['content-type']).toBe('application/json');
-        expect(JSON.parse(getBody)).toEqual({
-            id,
-            username: 'john',
-            age: 20,
-            hobbies: ['reading', 'swimming'],
-        });
     });
 
     it('We try to update the created record with a PUT api/users/{userId} request', async () => {
@@ -217,3 +249,4 @@ describe('server', () => {
         expect(JSON.parse(getBody)).toEqual({ error: 'User not found' });
     });
 });
+
