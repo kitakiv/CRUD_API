@@ -1,14 +1,1 @@
-[
-    {
-        "id": "4833004d-f79d-48d1-b19f-09e498cd4497",
-        "username": "admin",
-        "age": 20,
-        "hobbies": ["Sports", "Cooking"]
-    },
-    {
-        "id": "6fa98b58-c68f-4f4f-8ea2-d309d3a4f477",
-        "username": "admin2",
-        "age": 20,
-        "hobbies": ["Sports", "Cooking"]
-    }
-]
+[]

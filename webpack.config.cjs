@@ -27,5 +27,5 @@ module.exports = {
     new webpack.ProgressPlugin(),
     new Dotenv(),
   ],
-  mode: 'development',
+  mode: 'production',
 }
