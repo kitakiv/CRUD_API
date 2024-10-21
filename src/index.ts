@@ -11,10 +11,7 @@ const server = http.createServer((req, res) => {
   try {
     const { url } = req
     const urlPath = url || ''
-    if (urlPath === '/') {
-      res.writeHead(200, { 'Content-Type': 'text/plain' })
-      res.end('Hello, World!')
-    } else if (urlPath.startsWith('/api/users')) {
+   if (urlPath.startsWith('/api/users')) {
       userControllers.switchMethodUrl(req, res);
     } else if (urlPath !== '/' && !urlPath.startsWith('/api/users')) {
       res.writeHead(HttpCode.NOT_FOUND, { 'Content-Type': 'application/json' })
@@ -30,3 +27,5 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
+
+export default server
